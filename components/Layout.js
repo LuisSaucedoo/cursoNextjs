@@ -11,9 +11,14 @@ const Layout = ({children}) => {
                 <link href="https://unpkg.com/tailwindcss@^2.2.7/dist/tailwind.min.css" rel="stylesheet"/>
             </Head>
 
-            <Sidebar/>
+            <div className="bg-gray-200 min-h-screen">
+                <div className="flex min-h-screen">
+                    <Sidebar/>
+
+                    {children}
+                </div>
+            </div>
             
-            {children}
         </>
      );
 }
