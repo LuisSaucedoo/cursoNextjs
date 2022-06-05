@@ -9,3 +9,7 @@ En consola:
 npm i formik yup
 
 - Formik ayuda con la parte de ir leyendo el contenido de lo que el usuario escriba, y yup permetirá escribir un schema de validación
+
+# Instalación de Apollo Client
+En consola:
+npm i @apollo/client node-fetch
