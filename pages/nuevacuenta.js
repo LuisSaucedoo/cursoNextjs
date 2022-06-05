@@ -8,11 +8,14 @@ const NuevaCuenta = () => {
     // Validación del formulario
     const formik = useFormik({
         initialValues: {
-            nombre: 'HOLA',
+            nombre: '',
             apellido: '',
             email: '',
             password: ''
         },
+        validationSchema: Yup.object({
+            nombre: Yup.string().required('El nombre es obligatorio')
+        }),
         onSubmit: valores => {
             console.log('enviando');
             console.log(valores);
@@ -43,8 +46,16 @@ const NuevaCuenta = () => {
                                     placeholder="Nombre Usuario"
                                     value={formik.values.nombre}
                                     onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
                                 />
                             </div>
+
+                            { formik.touched.nombre && formik.errors.nombre ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.nombre}</p>
+                                </div>
+                            ) : null }
 
                             <div className="mb-4">
                                 <label className="blox text-gray-700 text-sm font-bold mb-2" htmlFor="apellido">
