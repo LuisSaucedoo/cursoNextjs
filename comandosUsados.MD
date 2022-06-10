@@ -13,3 +13,6 @@ npm i formik yup
 # Instalación de Apollo Client
 En consola:
 npm i @apollo/client node-fetch
+
+# Instalación de graphql
+npm i graphql
