@@ -2,32 +2,24 @@ import React from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useQuery, gql } from '@apollo/client';
+import { useMutation, gql } from '@apollo/client';
 
-const QUERY = gql`
-    query obtenerProductos {
-        obtenerProductos {
+const NUEVA_CUENTA = gql`
+    mutation nuevoUsuario($input: UsuarioInput) { 
+        nuevoUsuario(input: $input) {
             id
             nombre
-            precio
-            existencia
+            apellido
+            email
         }
-    }
+    }  
 `;
+
 
 const NuevaCuenta = () => {
 
-    // Obtener Productos de Graphql
-    const { data, loading, error } = useQuery(QUERY);
-    /**
-     * data = Contiene la información
-     * loading = cambia de true a false (ideal para colocar un spinner)
-     * error = en caso de que las consultas no funcionen, un console.log(error) para tratar de ver el error
-     */
-
-    console.log(data);
-    console.log(loading);
-    console.log(error);
+    // Mutation para crear nuevos usuarios
+    const [ nuevoUsuario ] = useMutation(NUEVA_CUENTA);
 
     // Validación del formulario
     const formik = useFormik({
@@ -43,9 +35,30 @@ const NuevaCuenta = () => {
             email: Yup.string().email('El email no es válido').required('El email es obligatorio'),
             password: Yup.string().min(6, 'El password debe tener mínimo 6 caracteres').required('El password es obligatorio')
         }),
-        onSubmit: valores => {
-            console.log('enviando');
-            console.log(valores);
+        onSubmit: async valores => {
+            // console.log('enviando');
+            // console.log(valores);
+
+            const { nombre, apellido, email, password } = valores;
+
+            try {
+                const { data } = await nuevoUsuario({
+                    variables : {
+                        input: {
+                            nombre,
+                            apellido,
+                            email,
+                            password
+                        }
+                    }
+                });
+                console.log(data);
+                // Usuario creado correctamente
+
+                // Redirigir al usuario para iniciar sesión
+            } catch (error) {
+                console.log(error);
+            }
         }
     });
 
