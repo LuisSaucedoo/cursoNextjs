@@ -19,13 +19,45 @@ const NUEVO_CLIENTE = gql`
     }
 `;
 
+const OBTENER_CLIENTES_USUARIO = gql`
+  query ObtenerClientesVendedor {
+    obtenerClientesVendedor {
+      id
+      nombre
+      apellido
+      empresa
+      email
+      telefono
+      vendedor
+    }
+  }
+`;
+
 const NuevoCliente = () => {
 
     // Routing
     const router = useRouter();
 
     // Parte del paso 2: Mutation para crear nuevos clientes
-    const [ nuevoCliente ] = useMutation(NUEVO_CLIENTE);
+    const [ nuevoCliente ] = useMutation(NUEVO_CLIENTE, {
+        update(cache, { data: { nuevoCliente } }) {
+            // Obtener el objeto de cache que deseamos actualizar
+            const { obtenerClientesVendedor } = cache.readQuery({ query: OBTENER_CLIENTES_USUARIO });
+
+            // Reescribimos el cache ( el cache nunca se debe modificar, más bien se debe sobreescribir )
+            cache.writeQuery({
+                query: OBTENER_CLIENTES_USUARIO,
+                data: {
+                    obtenerClientesVendedor : [ ...obtenerClientesVendedor, nuevoCliente ]
+                }
+            })
+        }
+    });
+    /* //TODO: update( cache, {data})
+     * 1. Le pasamos el cache a update()
+     * 2. Actualizamos el cache con un objeto 'data' y se va a actualizar con el nuevoCliente
+     * Es decir: vamos a tener una copia de cache que se va a actualizar con la información que tenga nuevoCliente
+     */
 
     // Paso 1: usar formik
     const formik = useFormik({
