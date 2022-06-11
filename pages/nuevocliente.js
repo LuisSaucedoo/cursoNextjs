@@ -1,7 +1,31 @@
 import React from 'react';
 import Layout from '../components/Layout';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const NuevoCliente = () => {
+
+    // Paso 1: usar formik
+    const formik = useFormik({
+        initialValues: {
+            nombre: '',
+            apellido: '',
+            empresa: '',
+            email: '',
+            telefono: ''
+        },
+        validationSchema: Yup.object({
+            nombre: Yup.string().required('El nombre del cliente es obligatorio'),
+            apellido: Yup.string().required('El apellido del cliente es obligatorio'),
+            empresa: Yup.string().required('El campo empresa del cliente es obligatorio'),
+            email: Yup.string().email('Email no válido').required('El email del cliente es obligatorio')
+            //? El teléfono no lo colocamos porque es opcional, si lo introducen se guarda, sino no.
+        }),
+        onSubmit: valores => {
+            console.log(valores);
+        }
+    })
+
     return ( 
         <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Nuevo Cliente</h1>
@@ -10,6 +34,7 @@ const NuevoCliente = () => {
                 <div className="w-full max-w-lg">
                     <form
                         className="bg-white shadow-md px-8 pt-6 pb-8 mb-4"
+                        onSubmit={formik.handleSubmit}
                     >
                         <div className="mb-4">
                             <label className="blox text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
@@ -21,11 +46,17 @@ const NuevoCliente = () => {
                                 id="nombre" 
                                 type="text" 
                                 placeholder="Nombre Cliente"
-                                // onChange={formik.handleChange}
-                                // onBlur={formik.handleBlur}
-                                // value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.nombre}
                             />
                         </div>
+                        { formik.touched.nombre && formik.errors.nombre ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.nombre}</p>
+                                </div>
+                        ) : null }
 
                         <div className="mb-4">
                             <label className="blox text-gray-700 text-sm font-bold mb-2" htmlFor="apellido">
@@ -37,11 +68,17 @@ const NuevoCliente = () => {
                                 id="apellido" 
                                 type="text" 
                                 placeholder="Apellido Cliente"
-                                // onChange={formik.handleChange}
-                                // onBlur={formik.handleBlur}
-                                // value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.apellido}
                             />
                         </div>
+                        { formik.touched.apellido && formik.errors.apellido ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.apellido}</p>
+                                </div>
+                        ) : null }
 
                         <div className="mb-4">
                             <label className="blox text-gray-700 text-sm font-bold mb-2" htmlFor="empresa">
@@ -53,11 +90,17 @@ const NuevoCliente = () => {
                                 id="empresa" 
                                 type="text" 
                                 placeholder="Empresa Cliente"
-                                // onChange={formik.handleChange}
-                                // onBlur={formik.handleBlur}
-                                // value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.empresa}
                             />
                         </div>
+                        { formik.touched.empresa && formik.errors.empresa ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.empresa}</p>
+                                </div>
+                        ) : null }
 
                         <div className="mb-4">
                             <label className="blox text-gray-700 text-sm font-bold mb-2" htmlFor="email">
@@ -69,11 +112,17 @@ const NuevoCliente = () => {
                                 id="email" 
                                 type="email" 
                                 placeholder="Email Cliente"
-                                // onChange={formik.handleChange}
-                                // onBlur={formik.handleBlur}
-                                // value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.email}
                             />
                         </div>
+                        { formik.touched.email && formik.errors.email ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.email}</p>
+                                </div>
+                        ) : null }
 
                         <div className="mb-4">
                             <label className="blox text-gray-700 text-sm font-bold mb-2" htmlFor="telefono">
@@ -85,9 +134,9 @@ const NuevoCliente = () => {
                                 id="telefono" 
                                 type="tel" 
                                 placeholder="Teléfono Cliente"
-                                // onChange={formik.handleChange}
-                                // onBlur={formik.handleBlur}
-                                // value={formik.values.email}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                value={formik.values.telefono}
                             />
                         </div>
 
