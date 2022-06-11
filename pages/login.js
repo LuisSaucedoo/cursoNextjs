@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { gql,useMutation } from '@apollo/client';
+import { useRouter } from 'next/router'
 
 const AUTENTICAR_USUARIO = gql`
     mutation AutenticarUsuario($input: AutenticarInput) {
@@ -13,6 +14,11 @@ const AUTENTICAR_USUARIO = gql`
 `;
 
 const Login = () => {
+
+    // Routing
+    const router = useRouter();
+
+    const [ mensaje, guardarMensaje ] = useState(null);
 
     // Mutation para crear nuevos usuarios en apollo
     const [ autenticarUsuario ] = useMutation(AUTENTICAR_USUARIO);
@@ -40,16 +46,42 @@ const Login = () => {
                     }
                 });
                 console.log(data);
+                guardarMensaje('Autenticando...');
+
+                // Guardar el token en localstorage
+                const { token } = data.autenticarUsuario;
+                localStorage.setItem('token', token);
+
+                // Redireccionar hacia cliente
+                setTimeout(() => {
+                    guardarMensaje(null);
+                    router.push('/')
+                }, 3000);
+
             } catch (error) {
-                console.log(error);
+                guardarMensaje(error.message.replace('GraphQL error: ',''))
+                // console.log(error);
+                
+                setTimeout(() => {
+                    guardarMensaje(null);
+                }, 3000);
             }
         }
     })
+
+    const mostrarMensaje = () => {
+        return(
+            <div className="bg-white py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+                <p>{mensaje}</p>
+            </div>
+        )
+    }
 
     return ( 
         <>
             <Layout>
                 <h1 className="text-center text-2xl text-white font-light">Login</h1> 
+                { mensaje && mostrarMensaje() }
 
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-sm">
