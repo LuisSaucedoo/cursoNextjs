@@ -16,3 +16,8 @@ npm i @apollo/client node-fetch
 
 # Instalación de graphql
 npm i graphql
+
+# Instalación de apollo-link-context
+npm i apollo-link context
+
+- Esta dependencia permite modificar los headers via context para que se propaguen por toda la aplicación
