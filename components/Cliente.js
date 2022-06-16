@@ -8,10 +8,37 @@ const ELIMINAR_CLIENTE = gql`
     }
 `;
 
+const OBTENER_CLIENTES_USUARIO = gql`
+  query ObtenerClientesVendedor {
+    obtenerClientesVendedor {
+      id
+      nombre
+      apellido
+      empresa
+      email
+      telefono
+      vendedor
+    }
+  }
+`;
+
 const Cliente = ({cliente}) => {
 
     // Mutation para eliminar cliente
-    const [ eliminarCliente ] = useMutation(ELIMINAR_CLIENTE);
+    const [ eliminarCliente ] = useMutation(ELIMINAR_CLIENTE, {
+        update(cache) {
+            // Obtener una copia del objeto de cache
+            const { obtenerClientesVendedor } = cache.readQuery({query: OBTENER_CLIENTES_USUARIO});
+
+            // Reescribir el cache
+            cache.writeQuery({
+                query: OBTENER_CLIENTES_USUARIO,
+                data: {
+                    obtenerClientesVendedor : obtenerClientesVendedor.filter( clienteActual => clienteActual.id !== id )
+                }
+            })
+        }
+    });
 
     const { nombre, apellido, empresa, email, id } = cliente;
 
@@ -38,7 +65,7 @@ const Cliente = ({cliente}) => {
                         }
                     });
                     // console.log(data);
-                    
+
                     // Mostrar una alerta
                     Swal.fire(
                         'Eliminado!',
