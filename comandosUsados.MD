@@ -21,3 +21,8 @@ npm i graphql
 npm i apollo-link-context
 
 - Esta dependencia permite modificar los headers via context para que se propaguen por toda la aplicación
+
+# Instalación de Sweet Alert 2
+npm install sweetalert2
+
+- Esta dependencia permite modificar el tipo de notificaciones para las validaciones (mejora gráfica más que nada)

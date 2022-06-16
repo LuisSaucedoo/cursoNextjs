@@ -1,4 +1,5 @@
 import React from 'react';
+import Swal from 'sweetalert2';
 
 const Cliente = ({cliente}) => {
 
@@ -6,7 +7,25 @@ const Cliente = ({cliente}) => {
 
     // Elimina un cliente
     const confirmarEliminarCliente = id => {
-        console.log('eliminando', id);
+        Swal.fire({
+            title: '¿Deseas eliminar a este cliente?',
+            text: "Esta acción no se puede deshacer !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar',
+            cancelButtonText: 'No, Cancelar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                console.log('eliminando', id);
+              Swal.fire(
+                'Eliminado!',
+                'Your file has been deleted.',
+                'success'
+              )
+            }
+          })
     }
 
 
