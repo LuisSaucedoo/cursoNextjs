@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Swal from 'sweetalert2';
 
 const OBTENER_CLIENTE = gql`
     query obtenerCliente($id:ID!) {
@@ -76,10 +77,17 @@ const EditarCliente = () => {
                     }
                 }
             });
+            // console.log(data);
 
-            console.log(data);
+            // Mostrar alerta
+            Swal.fire(
+                'Actualizado!',
+                'El cliente se actualizó correctamente',
+                'success'
+            )
 
-            // TODO: Redireccionar
+            // Redireccionar
+            router.push('/');
         } catch (error) {
             console.log(error);
         }
