@@ -24,7 +24,7 @@ const EditarCliente = () => {
     console.log(id)
 
     // Consultar para obtener el cliente
-    const { data, loading, error } = useQuery(OBTENER_CLIENTE, {
+    const { data, loading } = useQuery(OBTENER_CLIENTE, {
         variables: {
             id
         }
@@ -42,7 +42,9 @@ const EditarCliente = () => {
 
     if (loading) return 'Cargando...';
 
-    console.log(data);
+    // console.log(data);
+
+    const { obtenerCliente } = data;
 
     return ( 
         <Layout>
@@ -53,9 +55,15 @@ const EditarCliente = () => {
 
                     <Formik
                         validationSchema={ schemaValidacion }
+                        enableReinitialize
+                        initialValues={ obtenerCliente }
+                        onSubmit={ ( valores, funciones ) => {
+                            console.log(valores);
+                            console.log(funciones);
+                        }}
                     >
                     {props => {
-                    console.log(props);
+                    // console.log(props);
                     return (
 
                         <form
@@ -74,7 +82,7 @@ const EditarCliente = () => {
                                     placeholder="Nombre Cliente"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
-                                    // value={formik.values.nombre}
+                                    value={props.values.nombre}
                                 />
                             </div>
                             { props.touched.nombre && props.errors.nombre ? (
@@ -96,7 +104,7 @@ const EditarCliente = () => {
                                     placeholder="Apellido Cliente"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
-                                    // value={formik.values.apellido}
+                                    value={props.values.apellido}
                                 />
                             </div>
                             { props.touched.apellido && props.errors.apellido ? (
@@ -118,7 +126,7 @@ const EditarCliente = () => {
                                     placeholder="Empresa Cliente"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
-                                    // value={formik.values.empresa}
+                                    value={props.values.empresa}
                                 />
                             </div>
                             { props.touched.empresa && props.errors.empresa ? (
@@ -140,7 +148,7 @@ const EditarCliente = () => {
                                     placeholder="Email Cliente"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
-                                    // value={formik.values.email}
+                                    value={props.values.email}
                                 />
                             </div>
                             { props.touched.email && props.errors.email ? (
@@ -162,14 +170,14 @@ const EditarCliente = () => {
                                     placeholder="Teléfono Cliente"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
-                                    // value={formik.values.telefono}
+                                    value={props.values.telefono}
                                 />
                             </div>
 
                             <input
                                 type="submit"
                                 className="bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold"
-                                value="Registrar Cliente"
+                                value="Editar Cliente"
                             />
 
                         </form>
