@@ -1,18 +1,27 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 const OBTENER_CLIENTE = gql`
-    query obtenerCliente($id: ID!) {
-        obtenerCliente(id: $id) {
+    query obtenerCliente($id:ID!) {
+        obtenerCliente(id:$id) {
             nombre
             apellido
             email
-            telefono
             empresa
+            telefono
+        }
+    }
+`;
+
+const ACTUALIZAR_CLIENTE = gql`
+    mutation actualizarCliente($id: ID!, $input: ClienteInput) {
+        actualizarCliente(id: $id, input: $input) {
+            nombre
+            email
         }
     }
 `;
@@ -20,15 +29,18 @@ const OBTENER_CLIENTE = gql`
 const EditarCliente = () => {
     // obtener el ID actual
     const router = useRouter();
-    const { query: { id } } = router;
-    console.log(id)
+    const { query: {pid: id } } = router;
+    // console.log(id)
 
     // Consultar para obtener el cliente
-    const { data, loading } = useQuery(OBTENER_CLIENTE, {
+    const { data, loading, error } = useQuery(OBTENER_CLIENTE, {
         variables: {
             id
         }
     });
+
+    // Actualizar el cliente
+    const [ actualizarCliente ] = useMutation(ACTUALIZAR_CLIENTE);
     
     // Schema de validación
     const schemaValidacion = Yup.object({
@@ -42,9 +54,36 @@ const EditarCliente = () => {
 
     if (loading) return 'Cargando...';
 
-    // console.log(data);
+    console.log(data);
 
     const { obtenerCliente } = data;
+ 
+
+    // Modificar el cliente en la BD
+    const actualizarInfoCliente = async valores => {
+        const { nombre, apellido, empresa, email, telefono } = valores;
+        try {
+            const { data } = await actualizarCliente({
+                variables: {
+                    id: id,
+                    input: {
+                        nombre,
+                        apellido,
+                        nombre,
+                        empresa,
+                        email,
+                        telefono
+                    }
+                }
+            });
+
+            console.log(data);
+
+            // TODO: Redireccionar
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return ( 
         <Layout>
@@ -57,9 +96,8 @@ const EditarCliente = () => {
                         validationSchema={ schemaValidacion }
                         enableReinitialize
                         initialValues={ obtenerCliente }
-                        onSubmit={ ( valores, funciones ) => {
-                            console.log(valores);
-                            console.log(funciones);
+                        onSubmit={ ( valores ) => {
+                            actualizarInfoCliente(valores)
                         }}
                     >
                     {props => {
@@ -68,7 +106,7 @@ const EditarCliente = () => {
 
                         <form
                             className="bg-white shadow-md px-8 pt-6 pb-8 mb-4"
-                            // onSubmit={formik.handleSubmit}
+                            onSubmit={props.handleSubmit}
                         >
                             <div className="mb-4">
                                 <label className="blox text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
