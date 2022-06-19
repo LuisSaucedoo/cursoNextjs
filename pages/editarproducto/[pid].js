@@ -1,12 +1,36 @@
 import React from 'react';
 import Layout from '../../components/Layout';
 import { useRouter } from 'next/router';
+import { gql, useQuery } from '@apollo/client';
+
+const OBTENER_PRODUCTO = gql`
+    query obtenerProducto($id: ID!) {
+        obtenerProducto(id: $id) {
+            nombre
+            precio
+            existencia
+        }
+    }
+`;
 
 const EditarProducto = () => {
     const router = useRouter();
     const { query: {pid: id } } = router;
     // console.log(id);
 
+    // Consultar para obtener el producto
+    const { data, loading, error } = useQuery(OBTENER_PRODUCTO, {
+        variables: {
+            id: id
+        }
+    });
+    console.log(data);
+    console.log(loading);
+    console.log(error);
+
+    if (loading) return 'Cargando...';
+
+    const { obtenerProducto } = data;
 
     return ( 
         <Layout>
