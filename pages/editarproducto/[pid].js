@@ -1,9 +1,10 @@
 import React from 'react';
 import Layout from '../../components/Layout';
 import { useRouter } from 'next/router';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Swal from 'sweetalert2';
 
 const OBTENER_PRODUCTO = gql`
     query obtenerProducto($id: ID!) {
@@ -11,6 +12,18 @@ const OBTENER_PRODUCTO = gql`
             nombre
             precio
             existencia
+        }
+    }
+`;
+
+const ACTUALIZAR_PRODUCTO = gql`
+    mutation ActualizarProducto($id: ID!, $input: ProductoInput) {
+        actualizarProducto(id: $id, input: $input) {
+            id
+            nombre
+            existencia
+            precio
+            creado
         }
     }
 `;
@@ -26,6 +39,10 @@ const EditarProducto = () => {
             id: id
         }
     });
+
+    // Mutation para modificar el producto
+    const [ actualizarProducto ] = useMutation(ACTUALIZAR_PRODUCTO);
+
     // Schema de validación
     const schemaValidacion = Yup.object({
         nombre: Yup.string().required('El nombre del producto es obligatorio'),
@@ -39,8 +56,40 @@ const EditarProducto = () => {
 
     if (loading) return 'Cargando...';
 
-    const actualizarInfoProducto = valores => {
-        console.log(valores);
+    if (!data) {
+        return 'Acción no permitida';
+    }
+
+    const actualizarInfoProducto = async valores => {
+        // console.log(valores);
+        const { nombre, existencia, precio } = valores;
+
+        try {
+            const { data} = await actualizarProducto({
+                variables: {
+                    id: id,
+                    input: {
+                        nombre,
+                        existencia,
+                        precio
+                    }
+                }
+            });
+            // console.log(data);
+
+            // Redirigir hacia productos
+            router.push('/productos');
+
+            // Mostrar alerta
+            Swal.fire(
+                'Correcto',
+                'El producto se actualizó correctamente',
+                'success'
+            )
+
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const { obtenerProducto } = data;
