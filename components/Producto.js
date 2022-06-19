@@ -1,8 +1,42 @@
 import React from 'react';
 import Swal from 'sweetalert2';
+import { gql, useMutation } from '@apollo/client';
 
-const Producto = ({ producto }) => {
+const ELIMINAR_PRODUCTO = gql`
+    mutation eliminarProducto($id: ID!) {
+        eliminarProducto(id: $id)
+    }
+`;
+
+const OBTENER_PRODUCTOS=gql`
+  query obtenerProductos {
+    obtenerProductos {
+      id
+      nombre
+      existencia
+      precio
+    }
+  }
+`;
+
+const Producto = ({producto}) => {
     const { nombre, precio, existencia, id } = producto;
+
+    // Mutation para eliminar productos
+    const [ eliminarProducto ] = useMutation(ELIMINAR_PRODUCTO, {
+        update(cache) {
+            const { obtenerProductos } = cache.readQuery({
+                query: OBTENER_PRODUCTOS
+            });
+
+            cache.writeQuery({
+                query: OBTENER_PRODUCTOS,
+                data: {
+                    obtenerProductos: obtenerProductos.filter( productoActual => productoActual.id !== id )
+                }
+            })
+        }
+    });
 
     // Función para botón: Eliminar
     const confirmarEliminarProducto = () => {
@@ -17,7 +51,24 @@ const Producto = ({ producto }) => {
             cancelButtonText: 'No, Cancelar'
           }).then( async (result) => {
             if (result.isConfirmed) { // El profe tiene result.value
+                try {
+                    // Eliminar producto de la base de datos
+                    const { data } = await eliminarProducto({
+                        variables: {
+                            id: id
+                        }
+                    });
+                    console.log(data);
 
+                    Swal.fire(
+                        'Producto eliminado',
+                        data.eliminarProducto,
+                        'success'
+                    )
+
+                } catch (error) {
+                    console.log(error);
+                }
             }
           })
     }
@@ -29,7 +80,7 @@ const Producto = ({ producto }) => {
             <td className='border px-4 py-2'>$ {precio}</td>
             <td className="border px-4 py-2">
                 <button
-                    type="buttom"
+                    type="button"
                     className="flex justify-center items-center bg-red-800 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
                     onClick={() => confirmarEliminarProducto() }
                 >
@@ -45,7 +96,7 @@ const Producto = ({ producto }) => {
 
             <td className="border px-4 py-2">
                 <button
-                    type="buttom"
+                    type="button"
                     className="flex justify-center items-center bg-green-600 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
                     // onClick={() => editarCliente() }
                 >

@@ -4,14 +4,14 @@ import { gql, useQuery } from "@apollo/client";
 import Producto from "../components/Producto";
 
 const OBTENER_PRODUCTOS=gql`
-query obtenerProductos {
-  obtenerProductos {
-    id
-    nombre
-    existencia
-    precio
+  query obtenerProductos {
+    obtenerProductos {
+      id
+      nombre
+      existencia
+      precio
+    }
   }
-}
 `;
 
 const Productos = () => {

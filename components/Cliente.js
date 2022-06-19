@@ -96,7 +96,7 @@ const Cliente = ({cliente}) => {
             <td className="border px-4 py-2">{email}</td>
             <td className="border px-4 py-2">
                 <button
-                    type="buttom"
+                    type="button"
                     className="flex justify-center items-center bg-red-800 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
                     onClick={() => confirmarEliminarCliente() }
                 >
@@ -112,7 +112,7 @@ const Cliente = ({cliente}) => {
 
             <td className="border px-4 py-2">
                 <button
-                    type="buttom"
+                    type="button"
                     className="flex justify-center items-center bg-green-600 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
                     onClick={() => editarCliente() }
                 >
