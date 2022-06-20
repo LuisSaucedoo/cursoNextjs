@@ -26,3 +26,6 @@ npm i apollo-link-context
 npm install sweetalert2
 
 - Esta dependencia permite modificar el tipo de notificaciones para las validaciones (mejora gráfica más que nada)
+
+# Para crear nuevo pedido se usará React-select
+npm i react-select
