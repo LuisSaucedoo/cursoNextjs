@@ -19,11 +19,21 @@ const PedidoState = ({children}) => {
 
     const [ state, dispatch ] = useReducer(PedidoReducer, initialState);
 
+    // Modifica el cliente
+    const agregarCliente = cliente => {
+        // console.log(cliente);
+
+        // dispatch manda a llamar el PedidoReducer
+        dispatch({
+            type: SELECCIONAR_CLIENTE,
+            payload: cliente
+        })
+    }
 
     return (
         <PedidoContext.Provider
             value={{
-                
+                agregarCliente
             }}
         > {children}
         </PedidoContext.Provider>
