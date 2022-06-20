@@ -5,18 +5,23 @@ import { gql, useQuery } from "@apollo/client";
 import Pedido from "../components/Pedido";
 
 const OBTENER_PEDIDOS = gql`
-  query ObtenerPedidos {
-    obtenerPedidos {
+  query ObtenerPedidosVendedor {
+    obtenerPedidosVendedor {
       id
       pedido {
         id
         cantidad
         nombre
       }
-      total
-      cliente
+      cliente {
+        id
+        nombre
+        apellido
+        email
+        telefono
+      }
       vendedor
-      fecha
+      total
       estado
     }
   }
@@ -28,7 +33,7 @@ const Pedidos = () => {
   
   if (loading) return 'Cargando...';
   
-  const { obtenerPedidos } = data; // al profe le salió como variable: obtenerPedidosVendedor
+  const { obtenerPedidosVendedor } = data; // al profe le salió como variable: obtenerPedidosVendedor
   console.log(data);
   console.log(loading);
   console.log(error);
@@ -42,10 +47,10 @@ const Pedidos = () => {
             <a className="bg-blue-800 py-2 px-5 mt-3 inline-block text-white rounded text-sm hover:bg-gray-800 mb-3 uppercase font-bold">Nuevo Pedido</a>
           </Link>
 
-          { obtenerPedidos.length === 0 ? (
+          { obtenerPedidosVendedor.length === 0 ? (
             <p className="mt-5 text-center text-2xl">No hay pedidos aún</p>
           ) : (
-            obtenerPedidos.map( pedido => (
+            obtenerPedidosVendedor.map( pedido => (
               <Pedido
                 key={pedido.id}
                 pedido={pedido}
