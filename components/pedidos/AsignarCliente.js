@@ -33,4 +33,4 @@ const AsignarCliente = () => {
      );
 }
  
-export default AsignarClietne;
+export default AsignarCliente;
