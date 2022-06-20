@@ -27,9 +27,9 @@ const Header = () => {
 
     // Query de apollo
     const { data, loading, error, client} = useQuery(OBTENER_USUARIO);
-    console.log(data);
-    console.log(loading);
-    console.log(error);
+    // console.log(data);
+    // console.log(loading);
+    // console.log(error);
 
     // Proteger que no accedamos a data antes de tener resultados
     if (loading) return null;
