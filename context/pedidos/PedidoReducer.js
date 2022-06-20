@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import {
     SELECCIONAR_CLIENTE,
     SELECCIONAR_PRODUCTO,
@@ -10,6 +11,12 @@ export default ( state, action ) => {
             return {
                 ...state,
                 cliente: action.payload
+            }
+
+        case SELECCIONAR_PRODUCTO:
+            return {
+                ...state,
+                productos: action.payload
             }
         
         default:
