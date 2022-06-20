@@ -47,7 +47,7 @@ const MejoresClientes = () => {
         <Layout>
             <h1 className='text-2xl text-gray-800 font-light'>Mejores Clientes</h1>
 
-            <ResponsiveContainer width="100%" height="100%">
+            {/* <ResponsiveContainer width="100%" height="100%"> */}
                 <BarChart
                     className='mt-10'
                     width={600}
@@ -67,7 +67,7 @@ const MejoresClientes = () => {
                     <Legend />
                     <Bar dataKey="total" fill="#3182CE" />
                 </BarChart>
-            </ResponsiveContainer>
+            {/* </ResponsiveContainer> */}
 
         </Layout>
      );
