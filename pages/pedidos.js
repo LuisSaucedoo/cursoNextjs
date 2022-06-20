@@ -11,6 +11,7 @@ const OBTENER_PEDIDOS = gql`
       pedido {
         id
         cantidad
+        nombre
       }
       total
       cliente
