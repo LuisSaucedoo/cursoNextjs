@@ -5,7 +5,8 @@ import PedidoReducer from './PedidoReducer';
 import {
     SELECCIONAR_CLIENTE,
     SELECCIONAR_PRODUCTO,
-    CANTIDAD_PRODUCTOS
+    CANTIDAD_PRODUCTOS,
+    ACTUALIZAR_TOTAL
 } from '../../types'
 
 const PedidoState = ({children}) => {
@@ -58,13 +59,21 @@ const PedidoState = ({children}) => {
         })
     }
 
+    const actualizarTotal = () => {
+        dispatch({
+            type: ACTUALIZAR_TOTAL
+        })
+    }
+
     return (
         <PedidoContext.Provider
             value={{
                 productos: state.productos,
+                total: state.total,
                 agregarCliente,
                 agregarProducto,
-                cantidadProductos
+                cantidadProductos,
+                actualizarTotal
             }}
         > {children}
         </PedidoContext.Provider>
