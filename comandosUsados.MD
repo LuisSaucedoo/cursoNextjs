@@ -29,3 +29,6 @@ npm install sweetalert2
 
 # Para crear nuevo pedido se usará React-select
 npm i react-select
+
+# Instalación de rechart
+npm install recharts
