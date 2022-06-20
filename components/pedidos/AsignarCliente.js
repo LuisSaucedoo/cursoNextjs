@@ -34,7 +34,7 @@ const AsignarCliente = () => {
 
     useEffect( () => {
         agregarCliente(cliente);
-    }, [cliente])
+    }, [ cliente ])
 
     const seleccionarCliente = clientes => {
         setCliente(clientes);
